@@ -6,7 +6,7 @@ import bs4
 # print(f)
 
 try:
-   with urllib.request.urlopen('https://www.microcenter.com/search/search_results.aspx?N=4294966998&prt=clearance') as f:
+   with urllib.request.urlopen('https://www.microcenasdter.com/search/search_results.aspx?N=4294966998&prt=clearance') as f:
       print(f.read().decode('utf-8'))
 except urllib.error.URLError as e:
    print(e.reason)
