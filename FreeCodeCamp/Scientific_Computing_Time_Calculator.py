@@ -3,7 +3,7 @@ def add_time(start_time, duration, day="None"):
     # return (time[0])
 
     #Day of Week
-    day_of_week=("null","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
+    day_of_week=("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday")
 
     #Deconstruct user input
     day = day.capitalize()
@@ -56,9 +56,9 @@ def add_time(start_time, duration, day="None"):
         minutes = str(minutes) 
     
     if day != "None":
-        day_index = day_of_week.index(day)
+        day_index = int(day_of_week.index(day)) + 1
         day_index += days
-        out_day = day_index % 7
+        out_day = (day_index % 7) - 1
     separator = ", "
 
     #output variable starts getting constructed here
@@ -103,4 +103,4 @@ def add_time(start_time, duration, day="None"):
     # return new_time
     return (output_val)
 
-print(add_time("11:59 PM", "24:05"))
+print(add_time("11:59 PM", "24:05", "sunday"))
