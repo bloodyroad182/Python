@@ -4,14 +4,19 @@ class Category:
     def __init__ (self, category):
         self.category = category
         self.ledger = []
-        print ("Fuck this thing")
+        
+    def __str__(self):
+        output=""
+        out_max_width=30
+        out_description_max_width=23
+        return "some str" 
     
     def deposit (self, amount, description=""):
         self.amount = str(amount)
         self.description = description
         self.ledger += ["amount:" + self.amount, "description:" + self.description]
     
-    def withdraw (self, amount, description=""):
+    def withdraw(self, amount, description=""):
         if self.check_funds(float(amount)):  
             self.amount = str(amount)
             self.description = description        
@@ -20,7 +25,7 @@ class Category:
         else:
             False
 
-    def get_balance (self):
+    def get_balance(self):
         # Retrieve all items in ledger
         c = 0
         balance = 0
@@ -39,7 +44,7 @@ class Category:
         else:
             False
 
-    def transfer (self, amount, dest_category):
+    def transfer(self, amount, dest_category):
         Transfer_Amount = float(self.amount)
         Transfer_source = "Transfer from " + self.category
         Transfer_destination = "Transfer to " + dest_category.category
