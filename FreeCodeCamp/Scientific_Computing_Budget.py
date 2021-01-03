@@ -9,7 +9,24 @@ class Category:
         output=""
         out_max_width=30
         out_description_max_width=23
-        return "some str" 
+        category_title=""
+        i=0
+        while i < (out_max_width - len(self.category)) / 2 :
+            category_title += "*"
+            i += 1
+        output += category_title + self.category + category_title + "\n"
+        
+        c = 0
+        balance = 0
+        while c < len(self.ledger):
+            amount = self.ledger[c].split(":")
+            descriptions = self.ledger[c+1].split(":")
+            description = descriptions[1]
+            balance += float(amount[1])
+            # print (self.ledger[c+1])
+            c += 2
+            output += description + str(balance) + "\n"
+        return output
     
     def deposit (self, amount, description=""):
         self.amount = str(amount)
