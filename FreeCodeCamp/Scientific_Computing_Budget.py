@@ -22,16 +22,18 @@ class Category:
             descriptions = self.ledger[c+1].split(":")
             description = descriptions[1]
             if len(description) > out_description_max_width:
-                output += description + "long description"
+                output += description[:23]
+                space_c = out_max_width - (23 + len(str(amount[1])))
+                while space_c > 0:
+                    space_c -= 1
+                    output += " "
             else:
-                
                 output += description
                 space_c = out_max_width - (len(description) + len(str(amount[1])))
                 while space_c > 0:
                     space_c -= 1
                     output += " "
-                    output += str(amount[1]) + "\n"
-            
+            output += str(amount[1]) + "\n"            
             balance += float(amount[1])
             # print (self.ledger[c+1])
             c += 2
