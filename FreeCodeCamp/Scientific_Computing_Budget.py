@@ -9,33 +9,44 @@ class Category:
         output=""
         out_max_width=30
         out_description_max_width=23
-        category_title=""
+        category_title_space=""
         i=0
         while i < (out_max_width - len(self.category)) / 2 :
-            category_title += "*"
+            category_title_space += "*"
             i += 1
-        output += category_title + self.category + category_title + "\n"
-        
+        output += category_title_space + self.category + category_title_space + "\n"
         c = 0
         balance = 0
         while c < len(self.ledger):
             amount = self.ledger[c].split(":")
             descriptions = self.ledger[c+1].split(":")
             description = descriptions[1]
+            if len(description) > out_description_max_width:
+                output += description + "long description"
+            else:
+                
+                output += description
+                space_c = out_max_width - (len(description) + len(str(amount[1])))
+                while space_c > 0:
+                    space_c -= 1
+                    output += " "
+                    output += str(amount[1]) + "\n"
+            
             balance += float(amount[1])
             # print (self.ledger[c+1])
             c += 2
-            output += description + str(balance) + "\n"
+            # output += description + str(amount[1]) + "\n"
+        output += "Total: " + str(balance)
         return output
     
     def deposit (self, amount, description=""):
-        self.amount = str(amount)
+        self.amount = "{:.2f}".format(amount)
         self.description = description
         self.ledger += ["amount:" + self.amount, "description:" + self.description]
     
     def withdraw(self, amount, description=""):
-        if self.check_funds(float(amount)):  
-            self.amount = str(amount)
+        if self.check_funds(float(amount)):
+            self.amount = "{:.2f}".format(amount)
             self.description = description        
             self.ledger += ["amount:-" + self.amount, "description:" + self.description]
             return True
@@ -62,12 +73,12 @@ class Category:
             False
 
     def transfer(self, amount, dest_category):
-        Transfer_Amount = float(self.amount)
-        Transfer_source = "Transfer from " + self.category
-        Transfer_destination = "Transfer to " + dest_category.category
+        Transfer_Amount = float(amount)
+        Transfer_source = "Transfer to " + dest_category.category
+        Transfer_destination = "Transfer from " + self.category
         if self.check_funds(Transfer_Amount):
             self.withdraw(Transfer_Amount,Transfer_source)
-            self.deposit(Transfer_Amount,Transfer_destination)
+            dest_category.deposit(Transfer_Amount,Transfer_destination)
             return True
         else:
             return False
