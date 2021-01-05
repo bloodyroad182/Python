@@ -87,7 +87,39 @@ class Category:
     # return "default return"
 
 
-# def create_spend_chart(categories):
+def create_spend_chart(categories):
+    spend_by_categories=[]
+    total_category_spent=0
+    grand_total_spent=0
+    for category in categories:
+        c=0
+        while c < len(category.ledger):
+            amount = category.ledger[c].split(":")
+            if float(amount[1]) < 0:
+                total_category_spent += float(amount[1])
+                
+            else:
+                pass
+            c += 2
+            print(category.category)
+            print(str(amount[1]))
+        spend_by_categories.append(category.category)
+        spend_by_categories.append(total_category_spent)
+    output="Percentage spent by category\n"
+    out_bar = 100
+    out_bar_scale = 10
+    out_bar_cat = "    "
+    while out_bar >= 0:
+        if len(str(out_bar)) == 3:
+            output += str(out_bar) + "|" + "\n"
+        elif len(str(out_bar)) == 2:
+            output += " " + str(out_bar) + "|" + "\n"
+        else:
+            output += "  " + str(out_bar) + "|" + "\n"
+        out_bar -= out_bar_scale
+    print(spend_by_categories)
+    return output
+        
 
 #Test Code
 food = Category("Food")
@@ -106,5 +138,5 @@ auto.withdraw(15)
 print(food)
 print(clothing)
 
-# print(create_spend_chart([food, clothing, auto]))
-
+print(create_spend_chart([food, clothing, auto]))
+print("EOF")
