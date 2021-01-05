@@ -45,13 +45,15 @@ class Category:
     def deposit (self, amount, description=""):
         self.amount = "{:.2f}".format(amount)
         self.description = description
-        self.ledger += ["amount:" + self.amount, "description:" + self.description]
+        tmp_obj={"amount": self.amount, "description": self.description}
+        self.ledger.append(tmp_obj)
     
     def withdraw(self, amount, description=""):
         if self.check_funds(float(amount)):
             self.amount = "{:.2f}".format(amount)
             self.description = description        
-            self.ledger += ["amount:-" + self.amount, "description:" + self.description]
+            tmp_obj={"amount": self.amount, "description": self.description}
+            self.ledger.append(tmp_obj)
             return True
         else:
             False
@@ -129,7 +131,6 @@ def create_spend_chart(categories):
     out_bar_scale = 10
     out_bar_cat_perc_t ="o  "
     out_bar_cat_perc_f ="   "
-    out_bar_cat_name = "     "
     while out_bar >= 0:
         if len(str(out_bar)) == 3:
             output += str(out_bar) + "| "
@@ -171,7 +172,10 @@ def create_spend_chart(categories):
         c -= 1
     output += "\n"
     
+
     #Generate category names under the bar chart
+    
+    #Find largest category string in list
     c=0
     largest_category_name=0
     while c < len(spend_by_categories)-1:
@@ -180,8 +184,7 @@ def create_spend_chart(categories):
         else:
             pass
         c += 2
-    # print ("largest cat length = " + str(largest_category_name))
-    # output += "largest cat length = " 
+
     i=0
     while i < largest_category_name:
         c=0
@@ -200,21 +203,29 @@ def create_spend_chart(categories):
         
 
 #Test Code
-food = Category("Food")
-food.deposit(1000, "initial deposit")
-food.withdraw(10.15, "groceries")
-food.withdraw(15.89, "restaurant and more food for dessert")
-# print(food.get_balance())
-clothing = Category("Clothing")
-food.transfer(50, clothing)
-clothing.withdraw(25.55)
-clothing.withdraw(100)
-auto = Category("Auto")
-auto.deposit(1000, "initial deposit")
-auto.withdraw(15)
+# food = Category("Food")
+# food.deposit(1000, "initial deposit")
+# food.withdraw(10.15, "groceries")
+# food.withdraw(15.89, "restaurant and more food for dessert")
+# # print(food.get_balance())
+# clothing = Category("Clothing")
+# food.transfer(50, clothing)
+# clothing.withdraw(25.55)
+# clothing.withdraw(100)
+# auto = Category("Auto")
+# auto.deposit(1000, "initial deposit")
+# auto.withdraw(15)
 
 # print(food)
 # print(clothing)
 
-print(create_spend_chart([food, clothing, auto]))
-# print("EOF")
+# print(create_spend_chart([food, clothing, auto]))
+
+
+
+food = Category("Food")
+entertainment = Category("Entertainment")
+business = Category("Business")
+
+food.deposit(900, "deposit")
+print(food.ledger)
