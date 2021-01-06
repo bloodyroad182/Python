@@ -5,7 +5,8 @@ class Category:
     def __init__ (self, category):
         self.category = category
         self.ledger = []
-        
+
+    #Contruct object print output    
     def __str__(self):
         output=""
         out_max_width=30
@@ -19,63 +20,62 @@ class Category:
         c = 0
         balance = 0
         while c < len(self.ledger):
-            amount = self.ledger[c].split(":")
-            descriptions = self.ledger[c+1].split(":")
-            description = descriptions[1]
+            amount = format(self.ledger[c]["amount"],'.2f')
+            description = self.ledger[c]["description"]
             if len(description) > out_description_max_width:
                 output += description[:23]
-                space_c = out_max_width - (23 + len(str(amount[1])))
+                space_c = out_max_width - (23 + len(str(amount)))
                 while space_c > 0:
                     space_c -= 1
                     output += " "
             else:
                 output += description
-                space_c = out_max_width - (len(description) + len(str(amount[1])))
+                space_c = out_max_width - (len(description) + len(str(amount)))
                 while space_c > 0:
                     space_c -= 1
                     output += " "
-            output += str(amount[1]) + "\n"            
-            balance += float(amount[1])
+            output += str(amount) + "\n"            
+            balance += float(amount)
             # print (self.ledger[c+1])
-            c += 2
+            c += 1
             # output += description + str(amount[1]) + "\n"
         output += "Total: " + str(balance)
         return output
     
     def deposit (self, amount, description=""):
-        self.amount = "{:.2f}".format(amount)
+        self.amount = float("{:.2f}".format(amount))
         self.description = description
-        tmp_obj={"amount": self.amount, "description": self.description}
+        tmp_obj = {"amount": self.amount, "description": self.description}
         self.ledger.append(tmp_obj)
     
     def withdraw(self, amount, description=""):
         if self.check_funds(float(amount)):
-            self.amount = "{:.2f}".format(amount)
+            self.amount = -(float("{:.2f}".format(amount)))
             self.description = description        
             tmp_obj={"amount": self.amount, "description": self.description}
             self.ledger.append(tmp_obj)
             return True
         else:
-            False
+            return False
 
     def get_balance(self):
         # Retrieve all items in ledger
         c = 0
         balance = 0
         while c < len(self.ledger):
-            amount = self.ledger[c].split(":")
-            balance += float(amount[1])
+            amount = self.ledger[c]['amount']
+            balance += float(amount)
             # print (self.ledger[c+1])
-            c += 2
+            c += 1
         return balance
         # print (len(self.ledger))
 
     def check_funds(self, checkfund):
         # Retrieve all items in ledger
-        if self.get_balance() > checkfund:
+        if self.get_balance() >= checkfund:
             return True
         else:
-            False
+            return False
 
     def transfer(self, amount, dest_category):
         Transfer_Amount = float(amount)
@@ -98,12 +98,12 @@ def create_spend_chart(categories):
     for category in categories:
         c=0
         while c < len(category.ledger):
-            amount = category.ledger[c].split(":")
-            if float(amount[1]) < 0:
-                total_category_spent += float(amount[1])                
+            amount = category.ledger[c]["amount"]
+            if float(amount) < 0:
+                total_category_spent += float(amount)                
             else:
                 pass
-            c += 2
+            c += 1
             # print(category.category)
             # print(str(amount[1]))
         spend_by_categories.append(category.category)
@@ -199,7 +199,7 @@ def create_spend_chart(categories):
         output += "\n"
         i += 1
 
-    return output
+    print (output)
         
 
 #Test Code
@@ -207,7 +207,7 @@ def create_spend_chart(categories):
 # food.deposit(1000, "initial deposit")
 # food.withdraw(10.15, "groceries")
 # food.withdraw(15.89, "restaurant and more food for dessert")
-# # print(food.get_balance())
+# print(food.get_balance())
 # clothing = Category("Clothing")
 # food.transfer(50, clothing)
 # clothing.withdraw(25.55)
@@ -223,9 +223,20 @@ def create_spend_chart(categories):
 
 
 
+# food = Category("Food")
+# entertainment = Category("Entertainment")
+# business = Category("Business")
+
+# food.deposit(900, "deposit")
+# print(food.ledger)
+
 food = Category("Food")
 entertainment = Category("Entertainment")
 business = Category("Business")
-
 food.deposit(900, "deposit")
-print(food.ledger)
+entertainment.deposit(900, "deposit")
+business.deposit(900, "deposit")
+food.withdraw(105.55)
+entertainment.withdraw(33.40)
+business.withdraw(10.99)
+create_spend_chart([business, food, entertainment])
